@@ -1,0 +1,16 @@
+{
+  "name": "skribbl.io",
+  "version": "1.0.0",
+  "description": "keeps a list for discord",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gianni Ingurgio",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "jsonfile": "^6.0.1"
+  }
+}
