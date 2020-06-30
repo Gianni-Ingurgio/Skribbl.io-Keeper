@@ -74,15 +74,7 @@ function update(channel) {
   if (lastMSG) {
     channel.messages.delete(lastMSG)
   }
-  hook.send('', {username:'Skribbl.io', embeds: [{
-        title: "Skribbl.io",
-        url: "http://Skribbl.io",
-        color: 7506394,
-        fields: [{
-            name: "list",
-            value: list.join(', ')
-        }],
-  }]})
+  hook.send(list.join(', '), {username:'Skribbl.io', split:{char:',', append: ','}})
   .then(message => {
     lastMSG = message.id
     jsonfile.writeFile('./lastMSG.json', lastMSG)
