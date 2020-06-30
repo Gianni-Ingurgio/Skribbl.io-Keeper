@@ -71,12 +71,12 @@ client.on('message', message => {
 });
 
 function update(channel) {
-  if (lastMSG) {
-    channel.messages.delete(lastMSG)
-  }
+  lastMSG.forEach((msg) => {
+    channel.messages.delete(msg.id)
+  });
   hook.send(list.join(', '), {username:'Skribbl.io', split:{char:',', append: ','}})
   .then(message => {
-    lastMSG = message.id
+    lastMSG = message
     jsonfile.writeFile('./lastMSG.json', lastMSG)
   })
   jsonfile.writeFile('./list.json', list)
