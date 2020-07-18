@@ -1,3 +1,4 @@
+node_modules/
 lastMSG.json
 list.json
 .env
