@@ -19,10 +19,12 @@ client.on('ready', () => {
     sender.channel = sender
   }
 })
-var lastMSG
-jsonfile.readFile('lastMSG.json', function (err, obj) {
+
+var data
+jsonfile.readFile('data.json', function (err, obj) {
   if (err) console.error(err)
-  lastMSG = obj
+  list = obj.list
+  lastMSG = obj.lastMSG
 })
 
 client.on('message', message => {
@@ -96,17 +98,14 @@ client.on('message', message => {
 
 function update(channel) {
   lastMSG.forEach((msg) => {
-    channel.messages.delete(msg.id)
-  });
     sender.channel.messages.delete(msg);
   })
   sender.send(list.join(', '), {split:{char:',', append: ','}})
   .then(message => {
-    lastMSG = message
-    jsonfile.writeFile('./lastMSG.json', lastMSG)
+    lastMSG = []
+    message.forEach((msg) => {lastMSG.push(msg.id)});
+    jsonfile.writeFile('./data.json',{"lastMSG" : lastMSG, "list" : list})
   })
-  jsonfile.writeFile('./list.json', list)
 }
 
-client.login(process.env.Discord);
 client.login(vars.token);
