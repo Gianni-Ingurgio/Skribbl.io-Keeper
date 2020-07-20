@@ -34,12 +34,13 @@ client.on('message', message => {
       .then(message => {message.delete({timeout: 5000})});
     return
   }
-  const args = message.content.slice(vars.prefix.length).trim().replace(/,/g, '' ).split(' ');
-  const command = args.shift().toLowerCase();
+  var args = message.content.slice(vars.prefix.length).trim().split(/ /);
+  var command = args.shift().toLowerCase();
+  args = args.join(' ').split(/, /g)
   switch(command){
       case 'add':
         list = list.concat(args)
-        sender.send('<@' + message.author.id + '> added \"' + args + '\"');
+        sender.send('<@' + message.author.id + '> added \"' + args.join(', ') + '\"');
         message.delete({timeout: 5000})
         update()
         break;
@@ -54,8 +55,9 @@ client.on('message', message => {
                 removed.push(item)
         			}
             });
-        if (notFound.length != 0) {sender.send(notFound + ' not found')}
-        sender.send('<@' + message.author.id + '> removed \"' + removed + '\"');
+        if (notFound.length != 0) {sender.send('"' + notFound.join(', ') + '" not found')}
+        if (removed.length === 0) {sender.send('<@' + message.author.id + '> attempted to remove something')}
+        else {sender.send('<@' + message.author.id + '> removed "' + removed + '"')}
         message.delete({timeout: 5000})
         update()
         break;
