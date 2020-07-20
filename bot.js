@@ -28,33 +28,36 @@ jsonfile.readFile('data.json', function (err, obj) {
 })
 
 client.on('message', message => {
-  const command = message.content.slice(prefix.length).split(' ').shift().toLowerCase();
   if (!message.content.toLowerCase().startsWith(vars.prefix) || message.author.bot) return;
   if (vars.restrict && message.channel != sender.channel) {
     message.channel.send('Keep skribbl commands to <#' + sender.channel.id + '>')
       .then(message => {message.delete({timeout: 5000})});
     return
   }
+  const args = message.content.slice(vars.prefix.length).trim().replace(/,/g, '' ).split(' ');
+  const command = args.shift().toLowerCase();
   switch(command){
       case 'add':
-        const add = message.content.slice('s!add'.length).trim().split(', ');
-        list = list.concat(add)
-        hook.send('added', {username:'Skribbl.io'});
-        update(message.channel)
+        list = list.concat(args)
+        sender.send('<@' + message.author.id + '> added \"' + args + '\"');
+        message.delete({timeout: 5000})
+        update()
         break;
-      case 'remove':
-        const remove = message.content.slice('s!remove'.length).trim().split(', ');
-        remove.forEach((item, i) =>	{
+      case 'remove':;
+        var notFound = [],
+            removed  = []
+        args.forEach((item, i) =>	{
         			const index = list.indexOf(item)
-              console.log(index);
-              console.log(list);
-        			if (index === -1) {message.channel.send(item + ' not found')}
+        			if (index === -1) {notFound.push(item)}
         			else {
                 list.splice(index, 1)
-                hook.send(item + ' removed', {username:'Skribbl.io'});
+                removed.push(item)
         			}
             });
-        update(message.channel)
+        if (notFound.length != 0) {sender.send(notFound + ' not found')}
+        sender.send('<@' + message.author.id + '> removed \"' + removed + '\"');
+        message.delete({timeout: 5000})
+        update()
         break;
       case 'help':
         var commands = [
@@ -91,12 +94,13 @@ client.on('message', message => {
         message.delete({timeout: 30000})
         break;
       case 'list':
-        update(message.channel)
+        update()
+        message.delete({timeout: 5000})
         break;
   }
 });
 
-function update(channel) {
+function update() {
   lastMSG.forEach((msg) => {
     sender.channel.messages.delete(msg);
   })
