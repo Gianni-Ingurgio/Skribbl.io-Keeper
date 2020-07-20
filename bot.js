@@ -1,28 +1,23 @@
-const Discord = require('discord.js');
-require('dotenv').config();
-const jsonfile = require('jsonfile')
-var url = require('url');
+const
+  Discord = require('discord.js'),
+  vars = require('./variables.json'),
+  jsonfile = require('jsonfile'),
+  client = new Discord.Client()
 
-const client = new Discord.Client();
-
-var hookURL = process.env.hook
-var hookVar = url.parse(hookURL).path.split('/');
-var hook
+var sender
 
 client.on('ready', () => {
-  console.log(client.user.username, 'ready')
-  client.fetchWebhook(hookVar[3], hookVar[4]).then(webhook => {
-    hook = webhook;
-    console.log(hook.name, 'ready');
-  })
-});
-
-var prefix = 's!'
-var list = []
-jsonfile.readFile('list.json', function (err, obj) {
-  if (err) console.error(err)
-  list = obj
-  console.log(list);
+  if (vars.mode === "hook") {
+    client.fetchWebhook(vars.hook.id, vars.hook.token).then(webhook => {
+      sender = webhook;
+      sender.channel = client.guilds.resolve(sender.guildID).channels.resolve(sender.channelID)
+      console.table({'bot' : client.user.username, 'webhook' : sender.name, 'restriction': (vars.restrict) ? sender.channel.name : 'disabled', 'prefix' : vars.prefix})
+    })
+  }
+  if (vars.mode === "basic") {
+    sender = client.guilds.resolve(vars.basic.guild).channels.resolve(vars.basic.channel)
+    sender.channel = sender
+  }
 })
 var lastMSG
 jsonfile.readFile('lastMSG.json', function (err, obj) {
@@ -31,8 +26,13 @@ jsonfile.readFile('lastMSG.json', function (err, obj) {
 })
 
 client.on('message', message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
   const command = message.content.slice(prefix.length).split(' ').shift().toLowerCase();
+  if (!message.content.toLowerCase().startsWith(vars.prefix) || message.author.bot) return;
+  if (vars.restrict && message.channel != sender.channel) {
+    message.channel.send('Keep skribbl commands to <#' + sender.channel.id + '>')
+      .then(message => {message.delete({timeout: 5000})});
+    return
+  }
   switch(command){
       case 'add':
         const add = message.content.slice('s!add'.length).trim().split(', ');
@@ -74,7 +74,9 @@ function update(channel) {
   lastMSG.forEach((msg) => {
     channel.messages.delete(msg.id)
   });
-  hook.send(list.join(', '), {username:'Skribbl.io', split:{char:',', append: ','}})
+    sender.channel.messages.delete(msg);
+  })
+  sender.send(list.join(', '), {split:{char:',', append: ','}})
   .then(message => {
     lastMSG = message
     jsonfile.writeFile('./lastMSG.json', lastMSG)
@@ -83,3 +85,4 @@ function update(channel) {
 }
 
 client.login(process.env.Discord);
+client.login(vars.token);

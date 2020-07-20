@@ -1,0 +1,14 @@
+{
+  "token"     : "bot token",
+  "mode"      : "hook or basic",
+  "basic"     : {
+    "guild"   : "server id",
+    "channel" : "channel id"
+  },
+  "hook"      : {
+    "id"      : "webhook id",
+    "token"   : "webhook token"
+  },
+  "restrict"  : false,
+  "prefix"    : "set a prefix"
+}
