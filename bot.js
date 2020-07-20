@@ -55,14 +55,38 @@ client.on('message', message => {
         update(message.channel)
         break;
       case 'help':
-        var lines = [
-          'prefix: ' + prefix,
-          '\`' + prefix + 'list   \` displays the list',
-          '\`' + prefix + 'add    \` adds a word or list to the list',
-          '\`' + prefix + 'remove \` removes a word or list from the list',
-          '\`' + prefix + 'help   \` shows this list'
+        var commands = [
+          vars.prefix + 'list',
+          vars.prefix + 'add',
+          vars.prefix + 'remove',
+          vars.prefix + 'help'
         ]
-        hook.send(lines.join('\n'), {username:'Skribbl.io'});
+        var helpText = [
+          'displays the list',
+          'adds a word or list to the list',
+          'removes a word or list from the list',
+          'shows this menu'
+        ]
+        const embed = new Discord.MessageEmbed({
+              title: "Skribbl.io",
+              description: "This bot stores a custom word list for skribbl.io",
+              thumbnail: {url: "https://skribbl.io/res/favicon.png"},
+              fields: [{
+                  name: "Prefix: " + vars.prefix,
+                  value: commands.join('\n'),
+                  inline: true
+                }, {
+                  name: "-----------------------------------------",
+                  value: helpText.join('\n'),
+                  inline: true
+                }],
+              footer: {
+                icon_url: 'https://www.iconsdb.com/icons/preview/color/7289DA/bomb-2-xl.png',
+                text: "This message self destructs for cleanliness"
+              }
+            })
+        sender.send(embed).then(message => {message.delete({timeout: 30000})})
+        message.delete({timeout: 30000})
         break;
       case 'list':
         update(message.channel)
