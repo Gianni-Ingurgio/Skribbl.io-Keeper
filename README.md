@@ -19,23 +19,23 @@
 ## Variables
 Create a variables.json file using variables.json.template
 - Token is a Discord bot token <details> <summary>How to set up a bot</summary>
-  1. Go to the [Discord developer portal](https://discord.com/developers/applications)
-  1. Create a new application with the ![New Application](https://img.shields.io/badge/-New%20Application-7289da) button in the top right
-  1. Give it a name
-  1. Click on your new application and go to the Bot tab
-  1. Copy the token shown under the username
-  1. Feel free to set whatever picture and username you want
+  1\. Go to the [Discord developer portal](https://discord.com/developers/applications)  
+  2\. Create a new application with the ![New Application](https://img.shields.io/badge/-New%20Application-7289da) button in the top right  
+  3\. Give it a name  
+  4\. Click on your new application and go to the Bot tab  
+  5\. Copy the token shown under the username  
+  6\. Feel free to set whatever picture and username you want  
 - You only have to set up the mode you choose
   -  Basic mode speaks directly through the bot user <Details> <summary>How to get IDs</summary>
-    1. Enable developer mode under Discord "Appearance" settings
-    1. Right click on your server and channel and click "copy ID"
+      1\. Enable developer mode under Discord "Appearance" settings  
+      2\. Right click on your server and channel and click "copy ID"  
   - Hook mode speaks allows you to set a separate icon and name from the bot user <Details> <summary>How to set up a webhook</summary>
-    1. Right click channel, click "Edit channel," then "Integrations," then "Webhooks"
-    1. Create a new webhook with the ![New Webhook](https://img.shields.io/badge/-New%20Webhook-7289da) button in the top
-    1. Set the name and avatar you want the bot to talk through (The skribbl logo is at the top of this file)
-    1. Copy the webhook URL
-    1. discordapp.com/api/webhooks/<u>\*\*\*Webhook ID\*\*\*</u>/<u>\*\*\*\*\*\*\*\*\*\*Webhook Token\*\*\*\*\*\*\*\*\*\*</u>
-    1. Paste the ID and token into their respective variables
+     1\. Right click channel, click "Edit channel," then "Integrations," then "Webhooks"  
+     2\. Create a new webhook with the ![New Webhook](https://img.shields.io/badge/-New%20Webhook-7289da) button in the top  
+     3\. Set the name and avatar you want the bot to talk through (The skribbl logo is at the top of this file)  
+     4\. Copy the webhook URL  
+     5\. discordapp.com/api/webhooks/<u>\*\*\*Webhook ID\*\*\*</u>/<u>\*\*\*\*\*\*\*\*\*\*Webhook Token\*\*\*\*\*\*\*\*\*\*</u>  
+     6\. Paste the ID and token into their respective variables  
 - Restrict prevents commands from running outside the channel set above
 - Prefix is a lowercase string
 
